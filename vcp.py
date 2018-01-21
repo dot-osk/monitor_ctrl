@@ -298,7 +298,7 @@ class PhyMonitor(object):
         """
         return self.send_vcp_code(vcp_code.VCP_CODE.get(vcp_code_key), value)
     
-    def get_vcp_value_by_name(self, vcp_code_key: str) -> (int, int):
+    def get_vcp_value_by_name(self, vcp_code_key: str) -> Tuple[int, int]:
         """
         根据功能名称读取vcp code的值和最大值
         :param vcp_code_key: key name of vcp_code.VCP_CODE dict
