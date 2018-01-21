@@ -208,7 +208,7 @@ def start_cli():
 
 
 if __name__ == '__main__':
-    # 接卸命令行参数
+    # 解析命令行参数
     parse_arg()
     
     if APP_OPTIONS.get('log_file'):
