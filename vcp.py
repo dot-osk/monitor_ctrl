@@ -5,6 +5,7 @@ import logging
 import ctypes
 from ctypes import wintypes
 import vcp_code
+from typing import Tuple
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ https://milek7.pl/ddcbacklight/mccs.pdf
 
 
 # #################################### Use Windows API to enumerate monitors
-def _get_physical_monitors_from_hmonitor(hmonitor: wintypes.HMONITOR)->list:
+def _get_physical_monitors_from_hmonitor(hmonitor: wintypes.HMONITOR) -> list:
     """
     Retrieves the physical monitors associated with an HMONITOR monitor handle
 
@@ -78,7 +79,7 @@ def _get_physical_monitors_from_hmonitor(hmonitor: wintypes.HMONITOR)->list:
     return list(phy_monitor_array)
 
 
-def enumerate_monitors()->list:
+def enumerate_monitors() -> list:
     """
     enumerate all physical monitor.
     ** 请注意防止返回的 Handle 对象被GC!
@@ -181,7 +182,7 @@ class PhyMonitor(object):
         analyze caps string
         :return:
         """
-        def find_(src: str, start_: str, end_: str)->str:
+        def find_(src: str, start_: str, end_: str) -> str:
             """
             查找 start_ 和 end_ 之间包围的内容
             :param src: 待寻找的支付串
@@ -228,7 +229,7 @@ class PhyMonitor(object):
     
     # ########################## 发送/读取 VCP 设置的函数
     
-    def send_vcp_code(self, code: int, value: int)->bool:
+    def send_vcp_code(self, code: int, value: int) -> bool:
         """
         send vcp code to monitor.
         
@@ -257,7 +258,7 @@ class PhyMonitor(object):
             _LOGGER.error(ctypes.WinError())
         return ret_
     
-    def read_vcp_code(self, code: int)->(int, int):
+    def read_vcp_code(self, code: int) -> Tuple[int, int]:
         """
         send vcp code to monitor, get current value and max value.
         
@@ -288,7 +289,7 @@ class PhyMonitor(object):
             _LOGGER.error(ctypes.WinError())
         return api_out_current_value.value, api_out_max_value.value
         
-    def set_vcp_value_by_name(self, vcp_code_key: str, value: int)->bool:
+    def set_vcp_value_by_name(self, vcp_code_key: str, value: int) -> bool:
         """
         根据功能名称发送vcp code和数据
         :param vcp_code_key: key name of vcp_code.VCP_CODE dict
@@ -297,7 +298,7 @@ class PhyMonitor(object):
         """
         return self.send_vcp_code(vcp_code.VCP_CODE.get(vcp_code_key), value)
     
-    def get_vcp_value_by_name(self, vcp_code_key: str)->(int, int):
+    def get_vcp_value_by_name(self, vcp_code_key: str) -> (int, int):
         """
         根据功能名称读取vcp code的值和最大值
         :param vcp_code_key: key name of vcp_code.VCP_CODE dict
@@ -366,7 +367,7 @@ class PhyMonitor(object):
         self.set_vcp_value_by_name('Contrast', value)
     
     @property
-    def color_preset_list(self)->list:
+    def color_preset_list(self) -> list:
         """
         可用的color preset, 显示器不一定全部支持
         :return:
@@ -374,7 +375,7 @@ class PhyMonitor(object):
         return list(vcp_code.COLOR_PRESET_CODE.keys())
     
     @property
-    def color_preset(self)->str:
+    def color_preset(self) -> str:
         """
         当前的color preset
         :return:
@@ -403,7 +404,7 @@ class PhyMonitor(object):
         return self.get_vcp_value_by_name('Video Gain Red')[1]
     
     @property
-    def rgb_gain(self)->(int, int, int):
+    def rgb_gain(self) -> Tuple[int, int, int]:
         """
         
         :return:  Red, Green, Blue
@@ -418,7 +419,7 @@ class PhyMonitor(object):
         max_ = self.rgb_gain_max
         
         # 检查传入参数
-        def check_input(value)->bool:
+        def check_input(value) -> bool:
             """
             检查传入的RGB gain
             :param value:
@@ -459,7 +460,7 @@ class PhyMonitor(object):
         return self.get_vcp_value_by_name('Display Usage Time')[0]
     
     @property
-    def osd_languages_list(self)->list:
+    def osd_languages_list(self) -> list:
         """
         VCP 中指定的语言列表
         :return:
@@ -532,7 +533,7 @@ class PhyMonitor(object):
         self.set_vcp_value_by_name('Input Source', vcp_code.INPUT_SRC_CODE.get(src))
 
     @property
-    def info_pannel_type(self)->str:
+    def info_pannel_type(self) -> str:
         pannel_type = self.get_vcp_value_by_name('Flat Panel Sub-Pixel Layout')[0]
         return vcp_code.FLAT_PANEL_SUB_PIXEL_LAYOUT_CODE.get(pannel_type, '')
 
