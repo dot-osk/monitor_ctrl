@@ -221,12 +221,22 @@ class PhyMonitor(object):
         );
         :return:
         """
-        import ctypes
         api_call = ctypes.windll.Dxva2.DestroyPhysicalMonitor
-        
         if not api_call(self._phy_monitor_handle):
             _LOGGER.error(ctypes.WinError())
-    
+
+    def save_nvram(self):
+        """
+        https://msdn.microsoft.com/en-us/library/vs/alm/dd692970(v=vs.85).aspx
+        BOOL SaveCurrentMonitorSettings(
+          _In_  HANDLE hMonitor
+        );
+        :return:
+        """
+        api_call = ctypes.windll.Dxva2.SaveCurrentMonitorSettings
+        if not api_call(self._phy_monitor_handle):
+            _LOGGER.error(ctypes.WinError())
+
     # ########################## 发送/读取 VCP 设置的函数
     
     def send_vcp_code(self, code: int, value: int) -> bool:

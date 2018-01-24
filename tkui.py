@@ -191,9 +191,13 @@ class MonitorTab(ttk.Frame):
                                                 'osd_language', self.phy_monitor.osd_languages_list)
         self.input_select_option = OptionListWidget(self, self.phy_monitor,
                                                     'input_src', self.phy_monitor.input_src_list)
-
-        self.reset_factory_button = ttk.Button(self, text="恢复出厂设置", command=self.phy_monitor.reset_factory)
-        self.auto_setup_button = ttk.Button(self, text="自动调整", command=self.phy_monitor.auto_setup_perform)
+        
+        self.buttons_frame = ttk.Frame(self)
+        self.reset_factory_button = ttk.Button(self.buttons_frame,
+                                               text="恢复出厂设置", command=self.phy_monitor.reset_factory)
+        self.auto_setup_button = ttk.Button(self.buttons_frame,
+                                            text="自动调整", command=self.phy_monitor.auto_setup_perform)
+        self.save_nvram_button = ttk.Button(self.buttons_frame, text="保存NVRAM", command=self.phy_monitor.save_nvram)
 
     def __init_ui(self):
         ttk.Label(self, text='亮度:').grid(row=0, column=0, sticky='SW')
@@ -210,8 +214,10 @@ class MonitorTab(ttk.Frame):
         self.color_preset_option.grid(row=4, column=1, sticky='W')
         self.osd_lang_option.grid(row=5, column=1, sticky='W')
         self.input_select_option.grid(row=6, column=1, sticky='W')
-        self.auto_setup_button.grid(row=7, column=0, sticky='W')
-        self.reset_factory_button.grid(row=7, column=1, sticky='E')
+        self.buttons_frame.grid(row=7, column=0, sticky='W', columnspan=2)
+        self.auto_setup_button.grid(row=0, column=0, sticky='W')
+        self.reset_factory_button.grid(row=0, column=1, sticky='W')
+        self.save_nvram_button.grid(row=0, column=2, sticky='W')
 
 
 class TkApp(tk.Tk):
